@@ -4,7 +4,7 @@
 ##### Gapminder
 ```
 library(gapminder)
-head(gapminder
+head(gapminder)
 ```
 ![image](https://user-images.githubusercontent.com/80669371/118664414-69eacf00-b82c-11eb-9251-385cc68b5560.png)
 
