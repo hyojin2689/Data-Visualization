@@ -27,6 +27,7 @@ exp + geom_point(alpha=0.3)+geom_smooth(color="gray",fill="gray",method="loess")
   <img src="https://user-images.githubusercontent.com/80669371/118661813-6fdfb080-b82a-11eb-88c2-a9bb324837ea.png" alt="factorio thumbnail"/>
 </p> 
 ⠀
+
 ##### ②"GDP Growth by Continent📈
 ```
 growth <- ggplot(data=gapminder,mapping=aes(x=year,y=gdpPercap))
