@@ -68,16 +68,16 @@ head(rel_by_region)
 ```
 ![image](https://user-images.githubusercontent.com/80669371/118791779-031ff100-b8d2-11eb-9ccb-c2c0f1a8b5af.png)
 
-###### 
+###### Region by bigregion
 ```
-p<-ggplot(data=gss_sm,mapping=aes(x=bigregion,fill=religion))
+p<-ggplot(rel_by_region,aes(x=religion,y=pct,fill=religion))
 
-p+geom_bar(position="dodge",mapping=aes(y=..prop..,group=religion))+
-facet_wrap(~race,ncol=1)+labs(x="Bigregion",y="Percent",
-                         title="Distribution of Religious Preferences by Region and Race",
-                         caption="Source:Gss_sm")
+p+geom_col(position="dodge2")+guides(fill=FALSE)+coord_flip()+
+facet_grid(~bigregion)+labs(x="region",y="percent",fill="종교_religion",
+                           title="Region by Bigregion",
+                           caption="gss_sm")
 ```
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/80669371/118791248-7d9c4100-b8d1-11eb-96a4-64825c45dec6.png" alt="factorio thumbnail"/>
+  <img src="https://user-images.githubusercontent.com/80669371/118792962-1b444000-b8d3-11eb-9429-3eb410c6a08c.png" alt="factorio thumbnail"/>
 </p> 
 
