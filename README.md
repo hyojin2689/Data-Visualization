@@ -1,2 +1,2 @@
-# Data-Visualization
+# Data-Visualization in R
 ### 📊 Data Visualization Practice
