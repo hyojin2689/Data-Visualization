@@ -1,7 +1,7 @@
 ## General Social Survey data
 #### 일반 사회 조사 데이터 
 ⠀
-##### Gss_sm
+#### Gss_sm
 ```
 library(socviz)
 head(gss_sm)
