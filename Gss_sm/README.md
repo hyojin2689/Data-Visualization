@@ -75,9 +75,9 @@ p<-ggplot(rel_by_region,aes(x=religion,y=pct,fill=religion))
 p+geom_col(position="dodge2")+guides(fill=FALSE)+coord_flip()+
 facet_grid(~bigregion)+labs(x="region",y="percent",fill="종교_religion",
                            title="Region by Bigregion",
-                           caption="gss_sm")
+                           caption="Source:gss_sm")
 ```
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/80669371/118792962-1b444000-b8d3-11eb-9429-3eb410c6a08c.png" alt="factorio thumbnail"/>
+  <img src="https://user-images.githubusercontent.com/80669371/118793336-7aa25000-b8d3-11eb-805b-888062c5ac4a.png" alt="factorio thumbnail"/>
 </p> 
 
