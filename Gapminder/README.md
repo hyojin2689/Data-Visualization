@@ -1,7 +1,7 @@
 ## Data on economic and health care trends by country
 #### 국가별 경제 수준과 의료 수준 동향을 정리한 데이터💰💊 
 ⠀
-#### Gapminder
+#### Data:Gapminder
 ```
 library(gapminder)
 head(gapminder)
