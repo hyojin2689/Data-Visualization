@@ -6,37 +6,37 @@
 library(ggplot2)
 head(midwest)
 ```
-![image](https://user-images.githubusercontent.com/80669371/118664414-69eacf00-b82c-11eb-9251-385cc68b5560.png)
+![image](https://user-images.githubusercontent.com/80669371/118924957-d4108a80-b978-11eb-8b6e-d3db5265f53e.png)
 
 ##### Package Used
 ```
 library(ggplot2)
 ```
 ⠀
-##### ①Economic Growth and Life Expectancy📈
+##### ①Percentage of people with university education in OH,WI
 ```
-exp <- ggplot(data=gapminder, mapping=aes(x=gdpPercap,y=lifeExp,color=continent))
+oh_wi<-c("OH","WI")
 
-exp + geom_point(alpha=0.3)+geom_smooth(color="gray",fill="gray",method="loess")+
-      scale_x_log10(labels=scales::dollar)+ labs(x="GDP Per Capit", y="Life Expectancy in Years",
-                                                 title="Economic Growth and Life Expectancy",
-                                                 subtitle="Data points are country-years",
-                                                 caption="Sourc: Gapminder,")
+p<-ggplot(data=subset(midwest,state%in%oh_wi),mapping=aes(x=percollege,fill=state))
+
+p+geom_histogram()+labs(x="Percentage of people with a college education",y="Count",
+                                                            title="Percentage of people with university education in OH,WI",
+                                                            caption="Source:midwest")
+
 ```
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/80669371/118661813-6fdfb080-b82a-11eb-88c2-a9bb324837ea.png" alt="factorio thumbnail"/>
+  <img src="https://user-images.githubusercontent.com/80669371/118925789-4170eb00-b97a-11eb-8a84-17100a7f5a21.png" alt="factorio thumbnail"/>
 </p> 
 
-##### ②"GDP Growth by Continent📈
+##### ②Regional Population Density by State
 ```
-growth <- ggplot(data=gapminder,mapping=aes(x=year,y=gdpPercap))
+p<-ggplot(data=midwest,mapping=aes(x=area,group=state,color=state))
 
-growth + geom_line(aes(group=country))+facet_wrap(~continent,ncol=5)+
-         theme(axis.text.x=element_text(angle=90))+labs(x="Year(1950~2000)",y="GDP Growth in Years",
-                                                        title="GDP Growth by Continent",
-                                                        caption="Source:Gapminder")
-```
+p+geom_density()+labs(x="Area",y="Density",
+                      title="Regional Population Density by State",
+                      caption="Source:midwest")
+```                      
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/80669371/118665103-fe553180-b82c-11eb-85b6-d751d4fad3fe.png" alt="factorio thumbnail"/>
+  <img src="https://user-images.githubusercontent.com/80669371/118926021-9ca2dd80-b97a-11eb-8e67-bcd2d46e4e06.png" alt="factorio thumbnail"/>
 </p> 
 
