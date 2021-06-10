@@ -40,8 +40,7 @@ growth + geom_line(aes(group=country))+facet_wrap(~continent,ncol=5)+
   <img src="https://user-images.githubusercontent.com/80669371/118665103-fe553180-b82c-11eb-85b6-d751d4fad3fe.png" alt="factorio thumbnail"/>
 </p> 
 
-##### ③ Regression model
-###### Linear Regression
+##### ③ Linear Regression model
 ```
 p <- ggplot(data=gapminder,mapping=aes(x=log(gdpPercap),y=lifeExp))
 
