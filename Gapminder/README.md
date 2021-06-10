@@ -27,7 +27,7 @@ exp + geom_point(alpha=0.3)+geom_smooth(color="gray",fill="gray",method="loess")
   <img src="https://user-images.githubusercontent.com/80669371/118661813-6fdfb080-b82a-11eb-88c2-a9bb324837ea.png" alt="factorio thumbnail"/>
 </p> 
 
-##### ②"GDP Growth by Continent📈
+##### ② GDP Growth by Continent📈
 ```
 growth <- ggplot(data=gapminder,mapping=aes(x=year,y=gdpPercap))
 
@@ -40,3 +40,16 @@ growth + geom_line(aes(group=country))+facet_wrap(~continent,ncol=5)+
   <img src="https://user-images.githubusercontent.com/80669371/118665103-fe553180-b82c-11eb-85b6-d751d4fad3fe.png" alt="factorio thumbnail"/>
 </p> 
 
+##### ③ Regression model
+###### Linear Regression
+```
+p <- ggplot(data=gapminder,mapping=aes(x=log(gdpPercap),y=lifeExp))
+
+p+geom_point(alpha=0.1)+geom_smooth(color="steelblue",fill="steelblue",method="lm")+
+  labs(title="Life Expectancy by GDP", 
+       X="gdpPercap", y="LifeExpectancy",
+       caption="Source:gapminder")
+```
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/80669371/121481675-5552be80-ca07-11eb-8bbf-55f770f928a2.png" alt="factorio thumbnail"/>
+</p> 
