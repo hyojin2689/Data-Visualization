@@ -12,8 +12,20 @@ head(organdata)
 ```
 library(ggplot2)
 ```
-⠀
-##### ①Donors by Year and Country (line graph)
+
+##### ①Donors by Year (line graph)
+```
+p<-ggplot(data=organdata,mapping=aes(x=year,y=donors,color=country))
+
+p+geom_line(aes(group=country))+labs(x="Year",y="Donors",
+                                          title="Donors by Year",
+                                          caption="Source:organdata")
+```
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/80669371/121472242-e328ac80-c9fb-11eb-82eb-244629521e84.png" alt="factorio thumbnail"/>⠀
+</p>
+
+##### ②Donors by Year and Country (line graph)
 ```
 p<-ggplot(data=organdata,mapping=aes(x=year,y=donors))
 
@@ -26,7 +38,7 @@ p+geom_line()+facet_wrap(~country)+labs(x="Year",y="Donors",
   <img src="https://user-images.githubusercontent.com/80669371/119147007-27bcca00-ba86-11eb-831a-fcde9d52c7f6.png" alt="factorio thumbnail"/>
 </p> 
 
-##### ②Donors by Country (box plot)
+##### ③Donors by Country (box plot)
 ```
 p<-ggplot(data=organdata,mapping=aes(x=reorder(country,donors,na.rm=TRUE),y=donors))
 
