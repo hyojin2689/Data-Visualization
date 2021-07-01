@@ -94,6 +94,7 @@ p1 + geom_col(position = 'dodge', width=0.8) + scale_y_log10() +
 <p align="center">
   <img src="https://user-images.githubusercontent.com/80669371/124048957-729d0a80-da52-11eb-805e-4df6b2c27739.png" alt="factorio thumbnail"/>⠀
 </p>
+
 ##### ①-2 대품종별 가출전염병에 걸린 두 수
 ```
 p1 <- ggplot(data = d1, mapping = aes(x=reorder(가축전염병명,sum), y=sum, fill=가축전염병명))
@@ -107,6 +108,7 @@ p1 + geom_col(position = 'dodge', width=0.8) + scale_y_log10() +
 <p align="center">
   <img src="https://user-images.githubusercontent.com/80669371/124049051-a6783000-da52-11eb-8bde-3c09a1001757.png" alt="factorio thumbnail"/>⠀
 </p>
+
 ##### ①-3 가축 전염병별 감염된 대품종의 비율
 ```
 p1 <- ggplot(data = d1, mapping = aes(x=가축전염병명, y=sum, fill=대품종))
@@ -135,6 +137,7 @@ p2 + geom_line() + geom_point(size = 2) +
 <p align="center">
   <img src="https://user-images.githubusercontent.com/80669371/124049603-cd833180-da53-11eb-81d4-a295822f0c6c.png" alt="factorio thumbnail"/>
 </p> 
+
 ###### ②-2 2011년부터 2020년까지 최근 10년간 월별 평균 마리수
 ```
 d3 <- df  %>% select('yy', 'mm', '발생두수.마리.') %>% 
@@ -217,7 +220,6 @@ d5 <- merge(d5,subd5,by=c('mm','대품종'),all=TRUE)
 d5[is.na(d5)] <- 0
 d5
 
-
 p5 <- ggplot(data = d5, mapping = aes(x=mm, y=mean, color = 대품종, group=대품종))
 p5 + geom_line() + geom_point(size = 2) + scale_y_log10() + 
   labs(title = '최근 10년(2011~2020) 사이의 월별 평균 가축 대품종별 발생 두수',
@@ -245,8 +247,6 @@ length(df$가축전염병명 %>% unique())
 
 disease_labels <- df$가축전염병명 %>% unique() %>% sort()
 mm_labels <- df$mm %>% unique() %>% sort()
-
-
 
 #월 데이터 생성
 mm_sum <- c()
