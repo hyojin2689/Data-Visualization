@@ -378,6 +378,7 @@ p7 + geom_bar(position = 'dodge', width=0.8,stat='identity') +coord_flip()+guide
 ```
 library(corrplot)
 ```
+```
 #원래 농장에서 각 농장별 가축 마리수 파악하기
 d8[d8$농장명.농장주. == '대륙',]
 d8[d8$농장명.농장주. == '미산농장',]
@@ -412,4 +413,25 @@ corrplot.mixed(corr=cor(d8[,c("소","돼지","벌","닭","오리")]))
 ```
 <p align="center">
   <img src="https://user-images.githubusercontent.com/80669371/124052281-18ec0e80-da59-11eb-95f6-26148fd35a9c.png" alt="factorio thumbnail"/>
+</p> 
+
+### 고성병원 조류 인플루엔자 바이러스 유입경로
+#### Data:농림축산식품부_고병원성조류인플루엔자 발생농가 바이러스 유입경로 분석_20170420.csv
+#### https://www.data.go.kr/data/15047827/fileData.do
+```
+path <- read.csv("inflow_path.csv") 
+path <- table(path$inflow_path)
+path <- data.frame(path)
+colnames(path)=c("inflow_path","count")
+path<-path %>% filter(count >= 3)
+path
+
+p8 <- ggplot(data = path, mapping = aes(x=reorder(inflow_path,count), y=count,fill=as.factor(inflow_path)))
+p8 + geom_bar(position = 'dodge', width=0.8,stat='identity') +coord_flip()+guides(fill=F)+
+  geom_text(aes(label = count), hjust = -1, color = "black")+
+  labs(title = '고성병원 조류 인플루엔자 바이러스 유입 경로',x = '유입 경로',y = '총 계')+
+  theme(axis.title=element_text(size=17),title=element_text(size=20))  
+```
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/80669371/124052776-0cb48100-da5a-11eb-85b3-815b63050764.png" alt="factorio thumbnail"/>
 </p> 
