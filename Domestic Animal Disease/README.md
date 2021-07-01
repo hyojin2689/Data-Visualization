@@ -102,7 +102,8 @@ p1 + geom_col(position = 'dodge', width=0.8) + scale_y_log10() +
   geom_text(aes(label = sum), vjust = 1, color = "black") + 
   labs(title = '대품종별 가출전염병에 걸린 두 수',
        x = '두 수',
-       y = '가축 전염병명')+coord_flip()+facet_wrap(~대품종,ncol=10)+  theme(axis.title=element_text(size=17),title=element_text(size=20))  
+       y = '가축 전염병명')+coord_flip()+facet_wrap(~대품종,ncol=10)+
+       theme(axis.title=element_text(size=17),title=element_text(size=20))  
 
 ```
 <p align="center">
@@ -115,7 +116,8 @@ p1 <- ggplot(data = d1, mapping = aes(x=가축전염병명, y=sum, fill=대품�
 p1 + geom_bar(stat='identity',position="fill") +
   labs(title = '가축 전염병별 감염된 대품종의 비율',
        x = '대품종',
-       y = '두 수')+coord_flip()+ theme(axis.title=element_text(size=17),title=element_text(size=20))
+       y = '두 수')+coord_flip()+
+       theme(axis.title=element_text(size=17),title=element_text(size=20))
 ```
 <p align="center">
   <img src="https://user-images.githubusercontent.com/80669371/124049125-c7d91c00-da52-11eb-9f13-974d67960985.png" alt="factorio thumbnail"/>⠀
@@ -163,7 +165,8 @@ d4 <- merge(d2,d3,by="mm")
 p4 <- ggplot(d4,aes(x=mm,y=mean,group=1))
 p4+geom_line(size=1,color="blue")+geom_line(aes(x=mm,y=mean2,group=1),size=1,color="red")+
   labs(title = '최근 5/10년(2016~2020/2011~2020) 사이의 월별 평균 발생 두수',x = '월',y = '평균 두 수')+
-  annotate(geom="text",x=03.3,y=1600,label="2011-2020",hjust=0)+annotate(geom="text",x=03,y=200,label="2016-2020",hjust=0)+
+  annotate(geom="text",x=03.3,y=1600,label="2011-2020",hjust=0)+
+  annotate(geom="text",x=03,y=200,label="2016-2020",hjust=0)+
   theme(axis.title=element_text(size=17),title=element_text(size=20))  
 ```
 <p align="center">
@@ -182,7 +185,8 @@ p5 <- ggplot(data = d5, mapping = aes(x=reorder(state,sum), y=sum,fill=as.factor
 p5 + geom_bar(position = 'dodge', width=0.8,stat='identity') + scale_y_log10() + 
   geom_text(aes(label = sum), vjust = -1, color = "black") + 
   labs(title = '지역별 가출전염병에 걸린 두 수',x = '지역',y = '두 수')+
-  theme(axis.text.x=element_text(angle=45),axis.title=element_text(size=17),title=element_text(size=20))+guides(fill=F)
+  theme(axis.text.x=element_text(angle=45),axis.title=element_text(size=17),title=element_text(size=20))+
+  guides(fill=F)
 
 ```
 <p align="center">
@@ -229,7 +233,8 @@ p5 + geom_line() + geom_point(size = 2) + scale_y_log10() +
 p5 + geom_line() + geom_point(size = 2) + scale_y_log10() + 
   labs(title = '최근 10년(2011~2020) 사이의 월별 평균 가축 대품종별 발생 두수',
        x = '월',
-       y = '평균 두 수')+facet_wrap(~대품종)+  theme(axis.title=element_text(size=17),title=element_text(size=20))  
+       y = '평균 두 수')+facet_wrap(~대품종)+
+       theme(axis.title=element_text(size=17),title=element_text(size=20))  
 ```
 <p align="center">
   <img src="https://user-images.githubusercontent.com/80669371/124050590-cc530400-da55-11eb-9eb1-a58accce62cf.png" alt="factorio thumbnail"/>
@@ -275,7 +280,8 @@ p6 <- ggplot(data = d6, mapping = aes(x=mm, y=mean, color = 가축전염병명, 
 p6 + geom_line() + geom_point(size = 2) + scale_y_log10() + 
   labs(title = '최근 10년(2011~2020) 사이의 월별 평균 가축전염병명별 발생 두수',
        x = '월',y = '평균 두 수') +
-  facet_wrap(~가축전염병명) + theme(legend.position = 'bottom')+  theme(axis.title=element_text(size=17),title=element_text(size=20))  
+  facet_wrap(~가축전염병명) + theme(legend.position = 'bottom')+ 
+  theme(axis.title=element_text(size=17),title=element_text(size=20))  
 ```
 <p align="center">
   <img src="https://user-images.githubusercontent.com/80669371/124050826-44b9c500-da56-11eb-8ae7-68d5478717f5.png" alt="factorio thumbnail"/>
@@ -285,10 +291,8 @@ p6 + geom_line() + geom_point(size = 2) + scale_y_log10() +
 ##### Package Used
 ```
 library(httr)
-library(tidyverse)
 library(jsonlite)
 library(ggmap)
-library(ggplot2)
 ```
 ```
 register_google(key='google API')
@@ -341,3 +345,71 @@ ggmap(kor) + geom_point(d7,
   <img src="https://user-images.githubusercontent.com/80669371/124051381-5f406e00-da57-11eb-8800-6c3d1d166418.png" alt="factorio thumbnail"/>
 </p> 
 
+##### ⑧농장별 총 두 수 집계 (상위 10개)
+```
+d8 <- df[,c(3,13)] #농장명과 대품종 컬럼 추출
+colnames(d8)
+d8 <- d8 %>% group_by(농장명.농장주.) #농장명별로집계
+d8 <- d8 %>% arrange(desc(농장명.농장주.)) #농장명 내림차순 정렬
+d8
+
+#중복 농장명 갯수 세기
+count_f<-data.frame(table(d8$농장명.농장주.)) 
+colnames(count_f)=c("farm_name","count")
+count_f<- count_f[c(order(count_f$count)),] #count 내림차순 정렬
+count_f<-tail(count_f,n=12) #상위 10개 추출 (확인 농장, 이름없는 농장 제외)
+count_f<-count_f[-9,] #확인 농장 제거
+count_f<-count_f[c(1:10),] #이름없는 농장 제거
+count_f <- count_f %>% arrange(-count)
+count_f
+
+p7 <- ggplot(data = count_f, mapping = aes(x=reorder(farm_name,-count), y=count,fill=as.factor(farm_name)))
+p7 + geom_bar(position = 'dodge', width=0.8,stat='identity') +coord_flip()+guides(fill=F)+
+  geom_text(aes(label = count), hjust = -1, color = "black")+
+  labs(title = '농장별 총 두 수 집계',x = '농장명',y = '총 계')+
+  theme(axis.title=element_text(size=17),title=element_text(size=20))  
+```
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/80669371/124051944-6a47ce00-da58-11eb-89b1-24b78fd1e07e.png" alt="factorio thumbnail"/>
+</p> 
+
+##### ⑨상관분석 (상위 10개)
+##### Package Used
+```
+library(corrplot)
+```
+#원래 농장에서 각 농장별 가축 마리수 파악하기
+d8[d8$농장명.농장주. == '대륙',]
+d8[d8$농장명.농장주. == '미산농장',]
+d8[d8$농장명.농장주. == '삼형제농장',]
+d8[d8$농장명.농장주. == '한우촌2농장',]
+d8[d8$농장명.농장주. == '양창조',]
+d8[d8$농장명.농장주. == '우리농장',]
+d8[d8$농장명.농장주. == '김영호',]
+d8[d8$농장명.농장주. == '대성농장',]
+d8[d8$농장명.농장주. == '2농장',]
+n<-d8[d8$농장명.농장주. == '1농장',]
+n<-data.frame(table(n$대품종)) #48마리 보유한 농장 가축 마리수 세기 (중복 행 갯수 세기)
+n
+
+#df생성
+a<-c(9,0,0,0,0)
+b<-c(9,0,0,0,0)
+c<-c(9,0,0,0,0)
+d<-c(9,0,0,0,0)
+e<-c(9,0,0,0,0)
+f<-c(7,3,0,0,0)
+g<-c(0,0,11,0,0)
+h<-c(11,0,0,1,0)
+i<-c(13,1,0,0,2)
+j<-c(44,3,0,0,1)
+d8<-data.frame(rbind(a,b,c,d,e,f,g,h,i,j))
+colnames(d8)=c("소","돼지","벌","닭","오리")
+rownames(d8)=c("대륙","미산농장","삼형제농장","한우촌2농장","양창조","우리농장","김영호","대성농장","2농장","1농장")
+d8
+library(corrplot)
+corrplot.mixed(corr=cor(d8[,c("소","돼지","벌","닭","오리")]))
+```
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/80669371/124052281-18ec0e80-da59-11eb-95f6-26148fd35a9c.png" alt="factorio thumbnail"/>
+</p> 
