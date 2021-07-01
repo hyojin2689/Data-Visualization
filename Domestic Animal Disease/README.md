@@ -54,8 +54,21 @@ df <- df[-grep(" ",df$대품종),]
 df <- transform(df, yy = substr(df$발생일자.진단일.,1,4))
 df <- transform(df, mm = substr(df$발생일자.진단일.,5,6))
 df <- transform(df, dd = substr(df$발생일자.진단일.,7,8))
+
+#state 칼럼 추가 
+map_df = df$농장소재지 %>% strsplit(split = ' ') 
+map_df
+
+map <- c()
+for(i in 1:length(map_df)){
+  map <- c(map, map_df[[i]][1])
+}
+
+df$state <- map
+
+head(df, n=20)
 ```
-![image](https://user-images.githubusercontent.com/80669371/124049256-08389a00-da53-11eb-84c8-4aa2af394571.png)
+![image](https://user-images.githubusercontent.com/80669371/124050237-20111d80-da55-11eb-9842-41be387ab9d8.png)
 
 ##### ①대품종별 가출전염병에 걸린 두 수
 ###### 분석을 위한 d1 데이터 프레임 생성
@@ -156,65 +169,175 @@ p4+geom_line(size=1,color="blue")+geom_line(aes(x=mm,y=mean2,group=1),size=1,col
 
 ##### ③지역별 가축 전염병에 걸린 두 수
 ```
-p<-ggplot(data=organdata,mapping=aes(x=reorder(country,donors,na.rm=TRUE),y=donors))
+d5 <- df  %>%
+  select('state', '발생두수.마리.') %>% 
+  group_by(state) %>% summarise(sum = sum(발생두수.마리.)) %>%
+  arrange(sum)
+d5
 
-p+geom_boxplot()+coord_flip()+labs(x=NULL)+labs(x=NULL,y="Donors", 
-                                                title="Donors by Country",
-                                                caption="Source:organdata")
+p5 <- ggplot(data = d5, mapping = aes(x=reorder(state,sum), y=sum,fill=as.factor(state)))
+p5 + geom_bar(position = 'dodge', width=0.8,stat='identity') + scale_y_log10() + 
+  geom_text(aes(label = sum), vjust = -1, color = "black") + 
+  labs(title = '지역별 가출전염병에 걸린 두 수',x = '지역',y = '두 수')+
+  theme(axis.text.x=element_text(angle=45),axis.title=element_text(size=17),title=element_text(size=20))+guides(fill=F)
+
 ```
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/80669371/119147659-c1847700-ba86-11eb-8183-9ce97a8a7cd0.png" alt="factorio thumbnail"/>
+  <img src="https://user-images.githubusercontent.com/80669371/124050324-4e8ef880-da55-11eb-905e-c0beaa01fc96.png" alt="factorio thumbnail"/>
 </p> 
 
-##### ④Donors by Country and Welfare (dot plot)
+##### ④ 최근 10년(2011~2020) 사이의 월별 평균 가축 대품종별 발생 두수
 ```
-p<-ggplot(data=organdata,mapping=aes(x=reorder(country,donors,na.rm=TRUE),y=donors,color=world))
+d5 <- df  %>% select('yy', 'mm', '대품종','발생두수.마리.') %>% 
+  subset(yy>=2011 & yy<=2020) %>%
+  group_by(mm,대품종) %>% summarise(mean = mean(발생두수.마리.)) 
 
-p+geom_jitter(position=position_jitter(width=0.15))+labs(x=NULL)+coord_flip()+theme(legend.position="top")+
-  labs(x="Year",y="Donors",title="Donors by Country and Welfare", caption="Source:organdata")
+bigcategory_labels <- df$대품종 %>% unique() %>% sort()
+mm_labels <- df$mm %>% unique() %>% sort()
+
+#월 데이터 생성
+mm_sum <- c()
+for(i in 1:length(bigcategory_labels)){
+  mm_sum = append(mm_sum,mm_labels)
+}
+mm_sum %>% sort()
+
+#대품종 데이터 생성
+bigcategory_sum <- c()
+for(i in 1:length(mm_labels)){
+  bigcategory_sum = append(bigcategory_sum,bigcategory_labels)
+}
+bigcategory_sum
+
+#월,대품종 데이터 생성
+subd5 <- data.frame(mm = mm_sum %>% sort(),
+                    대품종 = bigcategory_sum)
+#월, 대품종 데이터를 merge로 mean값을 넣고, 없는 값은 0으로 대체
+d5 <- merge(d5,subd5,by=c('mm','대품종'),all=TRUE)
+d5[is.na(d5)] <- 0
+d5
+
+
+p5 <- ggplot(data = d5, mapping = aes(x=mm, y=mean, color = 대품종, group=대품종))
+p5 + geom_line() + geom_point(size = 2) + scale_y_log10() + 
+  labs(title = '최근 10년(2011~2020) 사이의 월별 평균 가축 대품종별 발생 두수',
+       x = '월',
+       y = '평균 두 수')+  theme(axis.title=element_text(size=17),title=element_text(size=20))  
+
+p5 + geom_line() + geom_point(size = 2) + scale_y_log10() + 
+  labs(title = '최근 10년(2011~2020) 사이의 월별 평균 가축 대품종별 발생 두수',
+       x = '월',
+       y = '평균 두 수')+facet_wrap(~대품종)+  theme(axis.title=element_text(size=17),title=element_text(size=20))  
 ```
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/80669371/121473474-b37aa400-c9fd-11eb-8401-01d52b5554f8.png" alt="factorio thumbnail"/>
+  <img src="https://user-images.githubusercontent.com/80669371/124050590-cc530400-da55-11eb-9eb1-a58accce62cf.png" alt="factorio thumbnail"/>
 </p> 
 
-##### ⑤Road accident fatalities per 100,000 population by Donors
+###### ⑥최근 10년(2011~2020) 사이의 월별 평균 가축전염병명별 발생 두수
 ```
-p<-ggplot(data=organdata,mapping=aes(x=roads,y=donors))
+d6 <- df  %>% select('yy', 'mm', '가축전염병명','발생두수.마리.') %>% 
+  subset(yy>=2011 & yy<=2020) %>%
+  group_by(mm,가축전염병명) %>% summarise(mean = mean(발생두수.마리.)) 
+d6
 
-p+geom_point()+annotate(geom="rect",xmin=125,xmax=155,ymin=30,ymax=35,fill="red",alpha=0.2)+
-  annotate(geom="text",x=157,y=33,label="A surprisingly high \n recovery rate.",hjust=0)+
-  labs(title="Road accident fatalities per 100,000 population by Donors",
-      x="Roads", y="Donors", caption="Source:organdata")
+#데이터 개수 확인인
+length(df$가축전염병명 %>% unique())
+
+disease_labels <- df$가축전염병명 %>% unique() %>% sort()
+mm_labels <- df$mm %>% unique() %>% sort()
+
+
+
+#월 데이터 생성
+mm_sum <- c()
+for(i in 1:length(disease_labels)){
+  mm_sum = append(mm_sum,mm_labels)
+}
+mm_sum
+
+#가축전염병명 데이터 생성
+disease_sum <- c()
+for(i in 1:length(mm_labels)){
+  disease_sum = append(disease_sum,disease_labels)
+}
+disease_sum
+
+#월,가축전염병명 데이터 생성
+subd6 <- data.frame(mm = mm_sum %>% sort(),
+                    가축전염병명 = disease_sum)
+
+#월, 가축전염병명 데이터를 merge로 mean값을 넣고, 없는 값은 0으로 대체
+d6 <- merge(d6,subd6,by=c('mm','가축전염병명'),all=TRUE)
+d6[is.na(d6)] <- 0
+d6
+
+p6 <- ggplot(data = d6, mapping = aes(x=mm, y=mean, color = 가축전염병명, group=가축전염병명))
+p6 + geom_line() + geom_point(size = 2) + scale_y_log10() + 
+  labs(title = '최근 10년(2011~2020) 사이의 월별 평균 가축전염병명별 발생 두수',
+       x = '월',y = '평균 두 수') +
+  facet_wrap(~가축전염병명) + theme(legend.position = 'bottom')+  theme(axis.title=element_text(size=17),title=element_text(size=20))  
 ```
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/80669371/121477216-854b9300-ca02-11eb-889a-202dbebfa488.png" alt="factorio thumbnail"/>
+  <img src="https://user-images.githubusercontent.com/80669371/124050826-44b9c500-da56-11eb-8ae7-68d5478717f5.png" alt="factorio thumbnail"/>
 </p> 
 
-##### ⑥Visualize with summary data📊
-###### Package Used
+##### ⑦지도 그리기
+##### Package Used
 ```
-library(dplyr)
+library(httr)
+library(tidyverse)
+library(jsonlite)
+library(ggmap)
+library(ggplot2)
 ```
-###### Create summary data
 ```
-by_country<-organdata%>%group_by(consent_law,country)%>%
-summarize_if(is.numeric,funs(mean,sd),na.rm=TRUE)%>%ungroup()
-```
-###### by_country
-```
-head(by_country)
-```
-![image](https://user-images.githubusercontent.com/80669371/121474284-d48fc480-c9fe-11eb-8038-f108643e81d5.png)
+register_google(key='google API')
 
-###### Donor Procurement Rate by Country and Consent Law
-```
-p<-ggplot(data=by_country,mapping=aes(x=donors_mean,y=reorder(country,donors_mean),color=consent_law))
+#2016년에서 2020년까지의 필요한 데이터만 추출
+d7 <- df  %>% dplyr::select('yy','농장소재지','대품종','가축전염병명','발생두수.마리.','state') %>% 
+  subset(yy>=2016 & yy<=2020) %>%mutate(id = row_number()) %>% ungroup()
 
-p+geom_point(size=3)+labs(title="Donor Procurement Rate by Country and Consent Law",
-                          x="Donor Procurement Rate",y="",color="Consent Law",
-                          caption="Source:organdata")+theme(legend.position="top")
+
+#x, y인 경도, 위도 값을 넣어주기
+id_sum <- c()
+map_sum <- c()
+x_sum <- c()
+y_sum <- c()
+for(i in 1:nrow(d7)){
+  addr <- d7$농장소재지[i]
+  res <- GET(url = 'https://dapi.kakao.com/v2/local/search/address.json',
+             query = list(query = addr),
+             add_headers(Authorization = Sys.getenv('KAKAO_MAP_API_KEY')))
+  coord <- res %>% content(as = 'text') %>% fromJSON()
+  id_sum <- append(id_sum, i)
+  map_sum <- append(map_sum, addr)
+  x_sum <- append(x_sum,ifelse(is.null(coord$documents$x[1]),0,coord$documents$x[1]))
+  y_sum <- append(y_sum,ifelse(is.null(coord$documents$y[1]),0,coord$documents$y[1]))
+}
+
+subd7 <- data.frame(id = id_sum,
+                    농장소재지 = map_sum,
+                    x = x_sum,
+                    y = y_sum)
+
+d7 <- merge(d7,subd7,by=c('id','농장소재지'),all=TRUE)
+View(d7)
+d7 <- subset(d7, x!=0)
+d7 <- subset(d7, y!=0)
+d7 <- rename(d7, '행정구역'='state')
+
+kor <- get_map(location = c(127.1717,35.9899),
+               zoom = 7, scale = 2)
+
+ggmap(kor) + geom_point(d7, 
+                        mapping = aes(x=as.numeric(x),
+                                      y=as.numeric(y), 
+                                      color = 행정구역),
+                        shape = 16, size = 2) +
+  theme(axis.title=element_text(size=17),title=element_text(size=20)) +
+  labs(title='농장소재지 지도 시각화' , x ='경도', y = '위도')
 ```
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/80669371/121475082-f2a9f480-c9ff-11eb-8af5-00819022a936.png" alt="factorio thumbnail"/>
+  <img src="https://user-images.githubusercontent.com/80669371/124051381-5f406e00-da57-11eb-8800-6c3d1d166418.png" alt="factorio thumbnail"/>
 </p> 
 
