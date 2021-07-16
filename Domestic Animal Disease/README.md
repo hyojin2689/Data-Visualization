@@ -2,7 +2,7 @@
 #### 1995-2021 국내 가축 질병 정보에 대한 데이터 (21.04.22기준)
 ⠀
 #### Data: 가축+질병+발생+정보_20210429.csv
-##### https://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20151204000000000563&service_ty=&filter_ty=G&sort_id=regist_dt&s_data_nm=&cl_code=&instt_id=
+##### Data Source : https://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20151204000000000563&service_ty=&filter_ty=G&sort_id=regist_dt&s_data_nm=&cl_code=&instt_id=
 ![image](https://user-images.githubusercontent.com/80669371/124048296-f6ee8e00-da50-11eb-8012-f738c6bc9573.png)
 
 ##### Package Used
