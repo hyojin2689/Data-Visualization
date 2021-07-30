@@ -28,7 +28,7 @@ p+geom_histogram()+labs(x="Percentage of people with a college education",y="Cou
   <img src="https://user-images.githubusercontent.com/80669371/118925789-4170eb00-b97a-11eb-8a84-17100a7f5a21.png" alt="factorio thumbnail"/>
 </p> 
 
-##### ②Regional Population Density by State 🌎
+##### ②Regional Population Density by State🌎
 ```
 p<-ggplot(data=midwest,mapping=aes(x=area,group=state,color=state))
 
