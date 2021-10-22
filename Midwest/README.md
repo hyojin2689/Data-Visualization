@@ -2,9 +2,6 @@
 #### 미국 동부중부 437개 지역의 인구통계 정보를 담고 있는 데이터
 ⠀
 #### Data:Midwest
-```
-head(midwest)
-```
 ![image](https://user-images.githubusercontent.com/80669371/118924957-d4108a80-b978-11eb-8b6e-d3db5265f53e.png)
 ⠀
 ##### ①Percentage of people with university education in OH,WI 📊
