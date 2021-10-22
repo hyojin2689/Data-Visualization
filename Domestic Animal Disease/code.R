@@ -330,7 +330,7 @@ rownames(d8)=c("대륙","미산농장","삼형제농장","한우촌2농장","양
 d8
 corrplot.mixed(corr=cor(d8[,c("소","돼지","벌","닭","오리")]))
 
-###고성병원 조류 인플루엔자 바이러스 유입경로
+9.고성병원 조류 인플루엔자 바이러스 유입경로
 path <- read.csv("inflow_path.csv") 
 path <- table(path$inflow_path)
 path <- data.frame(path)
